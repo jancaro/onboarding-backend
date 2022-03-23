@@ -15,10 +15,10 @@
   <name>crd-msa-mvc</name>
   <description>Platilla spring mvc</description>
 
-  <applicationProperties>
+  <properties>
     <java.version>11</java.version>
     <crd-dto-security.version>0.6.0</crd-dto-security.version>
-  </applicationProperties>
+  </properties>
 
   <dependencies>
     <dependency>
