@@ -5,8 +5,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
-@EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+/*@EnableWebSecurity*/
+public class SecurityConfiguration {} /*extends WebSecurityConfigurerAdapter {
 
 
   @Override
@@ -19,4 +19,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
-}
+}*/

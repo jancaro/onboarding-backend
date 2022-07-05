@@ -4,9 +4,7 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public class Util {
 
   public static final Locale LOCALE = Locale.forLanguageTag("es-EC");
