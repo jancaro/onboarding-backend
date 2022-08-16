@@ -1,16 +1,25 @@
 package com.pichincha.mvc.domain.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class VehicleDto {
     private Long id;
+    @NotNull(message = "El campo placa es obligatorio")
     private String carPlate;
+    @NotNull(message = "El campo modelo es obligatorio")
     private String model;
+    @NotNull(message = "El campo chasis es obligatorio")
     private String chassisNumber;
-    private String type;
+    @NotNull(message = "El campo cilindraje es obligatorio")
     private Integer cylinderCapacity;
+    @NotNull(message = "El campo avalúo es obligatorio")
     private Double appraise;
+    @NotNull(message = "El campo vendido es obligatorio")
+    private boolean isSold;
+    private String type;
     private Long brandCarId;
     private Long carYardId;
-    private boolean isSold;
+
 
     public VehicleDto() {
     }

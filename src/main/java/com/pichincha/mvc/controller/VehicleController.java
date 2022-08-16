@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +26,12 @@ public class VehicleController {
     }
 
     @PostMapping("crear")
-    public ResponseEntity<VehicleDto> saveVehicle(@RequestBody VehicleDto VehicleDto) {
+    public ResponseEntity<VehicleDto> saveVehicle(@RequestBody @Valid VehicleDto VehicleDto) {
         return ResponseEntity.ok(this.vehicleService.saveVehicle(VehicleDto));
     }
 
     @PutMapping("actualizar")
-    public ResponseEntity<VehicleDto> updateVehicle(@RequestBody VehicleDto VehicleDto) {
+    public ResponseEntity<VehicleDto> updateVehicle(@RequestBody @Valid VehicleDto VehicleDto) {
         return ResponseEntity.ok(this.vehicleService.updateVehicle(VehicleDto));
     }
 

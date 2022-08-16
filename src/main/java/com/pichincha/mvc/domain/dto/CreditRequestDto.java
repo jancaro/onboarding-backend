@@ -2,16 +2,22 @@ package com.pichincha.mvc.domain.dto;
 
 import com.pichincha.mvc.domain.enums.CreditStatus;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class CreditRequestDto {
     private Long id;
+    @NotNull(message = "El campo fecha de creación es obligatorio")
     private Date creationDocumentDate;
+    @NotNull(message = "El campo meses plazo es obligatorio")
     private int monthsTerm;
+    @NotNull(message = "El campo cuotas es obligatorio")
     private int dues;
+    @NotNull(message = "El campo entrada es obligatorio")
     private double entry;
-    private String observation;
+    @NotNull(message = "El campo estado de crédito es obligatorio")
     private CreditStatus creditStatus;
+    private String observation;
     private Long clientId;
     private Long carYardId;
     private Long vehicleId;

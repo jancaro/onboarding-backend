@@ -2,9 +2,11 @@ package com.pichincha.mvc.service.impl;
 
 import com.pichincha.mvc.domain.CarYard;
 import com.pichincha.mvc.domain.dto.CarYardDto;
+import com.pichincha.mvc.domain.enums.CreditStatus;
 import com.pichincha.mvc.domain.mapper.CardYardMapper;
 import com.pichincha.mvc.exceptions.TransactionNotFoundException;
 import com.pichincha.mvc.repository.CarYardRepository;
+import com.pichincha.mvc.repository.CreditRequestRepository;
 import com.pichincha.mvc.service.CarYardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,14 @@ public class CarYardServiceImpl implements CarYardService {
 
     private final CarYardRepository carYardRepository;
 
+    private final CreditRequestRepository creditRequestRepository;
+
     private final CardYardMapper cardYardMapper;
 
     @Autowired
-    public CarYardServiceImpl(CarYardRepository carYardRepository, CardYardMapper cardYardMapper) {
+    public CarYardServiceImpl(CarYardRepository carYardRepository, CreditRequestRepository creditRequestRepository, CardYardMapper cardYardMapper) {
         this.carYardRepository = carYardRepository;
+        this.creditRequestRepository = creditRequestRepository;
         this.cardYardMapper = cardYardMapper;
     }
 
@@ -67,14 +72,13 @@ public class CarYardServiceImpl implements CarYardService {
     public Map<String, Object> deleteCarYard(Long carYardId) {
         Optional<CarYard> carYardSaved = this.carYardRepository.findById(carYardId);
         if(carYardSaved.isPresent()) {
-            /*if(carYardSaved.get().getClients() == null && carYardSaved.get().getVehicles() == null) {
-                this.carYardRepository.deleteById(carYardId);*/
+            boolean isEmptyInCredit = this.creditRequestRepository.getCreditByCarYardAndStatus(carYardId, CreditStatus.REGISTRADA).isEmpty();
+            if (isEmptyInCredit) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("result", "Eliminado correctamente");
                 return response;
-           /*} else {
-                throw new TransactionNotFoundException("No se puede eliminar porque el patio tiene referencias");
-            }*/
+            } else
+                throw new TransactionNotFoundException("No se puede eliminar porque existe un credito registrado asociado");
         } else {
             throw new TransactionNotFoundException("No se pudo eliminar porque no se encontró un patio con id "+carYardId);
         }

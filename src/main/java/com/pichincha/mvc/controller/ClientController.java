@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +27,12 @@ public class ClientController {
     }
 
     @PostMapping("crear")
-    public ResponseEntity<ClientDto> saveClient(@RequestBody ClientDto clientDto) {
+    public ResponseEntity<ClientDto> saveClient(@RequestBody @Valid ClientDto clientDto) {
         return ResponseEntity.ok(this.clientService.saveClient(clientDto));
     }
 
     @PutMapping("actualizar")
-    public ResponseEntity<ClientDto> updateClient(@RequestBody ClientDto clientDto) {
+    public ResponseEntity<ClientDto> updateClient(@RequestBody @Valid ClientDto clientDto) {
         return ResponseEntity.ok(this.clientService.updateClient(clientDto));
     }
 

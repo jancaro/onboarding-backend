@@ -4,10 +4,12 @@ import com.pichincha.mvc.domain.BrandCar;
 import com.pichincha.mvc.domain.CarYard;
 import com.pichincha.mvc.domain.Vehicle;
 import com.pichincha.mvc.domain.dto.VehicleDto;
+import com.pichincha.mvc.domain.enums.CreditStatus;
 import com.pichincha.mvc.domain.mapper.VehicleMapper;
 import com.pichincha.mvc.exceptions.TransactionNotFoundException;
 import com.pichincha.mvc.repository.BrandCarRepository;
 import com.pichincha.mvc.repository.CarYardRepository;
+import com.pichincha.mvc.repository.CreditRequestRepository;
 import com.pichincha.mvc.repository.VehicleRepository;
 import com.pichincha.mvc.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +29,16 @@ public class VehicleServiceImpl implements VehicleService {
 
     private final CarYardRepository carYardRepository;
 
+    private final CreditRequestRepository creditRequestRepository;
+
     private final VehicleMapper vehicleMapper;
 
     @Autowired
-    public VehicleServiceImpl(VehicleRepository vehicleRepository, BrandCarRepository brandCarRepository, CarYardRepository carYardRepository, VehicleMapper vehicleMapper) {
+    public VehicleServiceImpl(VehicleRepository vehicleRepository, BrandCarRepository brandCarRepository, CarYardRepository carYardRepository, CreditRequestRepository creditRequestRepository, VehicleMapper vehicleMapper) {
         this.vehicleRepository = vehicleRepository;
         this.brandCarRepository = brandCarRepository;
         this.carYardRepository = carYardRepository;
+        this.creditRequestRepository = creditRequestRepository;
         this.vehicleMapper = vehicleMapper;
     }
 
@@ -103,10 +108,14 @@ public class VehicleServiceImpl implements VehicleService {
         if(vehicleSaved.isPresent()) {
             CarYard carYard = vehicleSaved.get().getCarYard();
             if(carYard == null) {
-                this.vehicleRepository.deleteById(id);
-                Map<String, Object> response = new HashMap<>();
-                response.put("result", "Eliminado correctamente");
-                return response;
+                boolean isEmptyInCredit = this.creditRequestRepository.getCreditByVehicleAndStatus(id, CreditStatus.REGISTRADA).isEmpty();
+                if(isEmptyInCredit) {
+                    this.vehicleRepository.deleteById(id);
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("result", "Eliminado correctamente");
+                    return response;
+                } else
+                    throw new TransactionNotFoundException("No se puede eliminar porque existe un crédito registrado que tiene asociado este vehículo");
             } else {
                 throw new TransactionNotFoundException("No se encontró eliminar vehículo por tiene informacón asociada");
             }

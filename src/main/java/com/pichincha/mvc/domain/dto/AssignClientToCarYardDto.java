@@ -1,11 +1,15 @@
 package com.pichincha.mvc.domain.dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class AssignClientToCarYardDto {
 
+    @NotNull(message = "El campo id cliente es obligatorio")
     Long clientId;
+    @NotNull(message = "El campo id patio es obligatorio")
     Long carYardId;
+    @NotNull(message = "El campo fecha de asignación es obligatorio")
     Date assignDate;
 
     public AssignClientToCarYardDto() {

@@ -1,10 +1,16 @@
 package com.pichincha.mvc.domain.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class CarYardDto {
     private Long id;
+    @NotNull(message = "El campo nombre es obligatorio")
     private String name;
+    @NotNull(message = "El campo dirección es obligatorio")
     private String direction;
+    @NotNull(message = "El campo teléfono es obligatorio")
     private String phoneNumber;
+    @NotNull(message = "El campo punto de venta es obligatorio")
     private Integer pointSaleNumber;
 
     public CarYardDto() {

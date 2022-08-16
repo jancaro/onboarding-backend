@@ -32,7 +32,6 @@ public class Person {
 
     @Column
     @NotNull(message = "El campo edad es obligatorio")
-    //@Size(min = 18, max = 99, message = "La edad debe estar en un rango de 18 a 99")
     private int age;
 
     public Person(Long id, String identification, String names, String lastNames, String direction, String cellphoneNumber, int age) {

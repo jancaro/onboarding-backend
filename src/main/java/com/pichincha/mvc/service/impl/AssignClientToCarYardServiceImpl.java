@@ -1,15 +1,11 @@
 package com.pichincha.mvc.service.impl;
 
-import com.pichincha.mvc.domain.AssignClientToCarYard;
-import com.pichincha.mvc.domain.CarYard;
-import com.pichincha.mvc.domain.Client;
-import com.pichincha.mvc.domain.ClientCarYardKey;
+import com.pichincha.mvc.domain.*;
 import com.pichincha.mvc.domain.dto.AssignClientToCarYardDto;
 import com.pichincha.mvc.domain.mapper.AssignClientToCarYardMapper;
 import com.pichincha.mvc.exceptions.TransactionNotFoundException;
 import com.pichincha.mvc.repository.AssignClientToCarYardRepository;
-import com.pichincha.mvc.repository.CarYardRepository;
-import com.pichincha.mvc.repository.ClientRepository;
+import com.pichincha.mvc.repository.CreditRequestRepository;
 import com.pichincha.mvc.service.AssignClientToCarYardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +16,14 @@ import java.util.*;
 public class AssignClientToCarYardServiceImpl implements AssignClientToCarYardService {
     private final AssignClientToCarYardRepository repository;
 
-    private final ClientRepository clientRepository;
-    private final CarYardRepository carYardRepository;
+    private final CreditRequestRepository creditRequestRepository;
 
     private final AssignClientToCarYardMapper mapper;
 
     @Autowired
-    public AssignClientToCarYardServiceImpl(AssignClientToCarYardRepository repository, ClientRepository clientRepository, CarYardRepository carYardRepository, AssignClientToCarYardMapper mapper) {
+    public AssignClientToCarYardServiceImpl(AssignClientToCarYardRepository repository, CreditRequestRepository creditRequestRepository, AssignClientToCarYardMapper mapper) {
         this.repository = repository;
-        this.clientRepository = clientRepository;
-        this.carYardRepository = carYardRepository;
+        this.creditRequestRepository = creditRequestRepository;
         this.mapper = mapper;
     }
 
@@ -98,12 +92,16 @@ public class AssignClientToCarYardServiceImpl implements AssignClientToCarYardSe
     public Map<String, Object> deleteAssign(Long clientId, Long cardYardId) {
         Optional<AssignClientToCarYard> assignation = this.repository.findByClientIdAndCarYardId(clientId, cardYardId);
         if(assignation.isPresent()) {
-            this.repository.delete(assignation.get());
-            Map<String, Object> response = new HashMap<>();
-            response.put("result", "Eliminado correctamente");
-            return response;
+            boolean isEmptyInCredit = this.creditRequestRepository.getCreditByClientAndVehicle(clientId, cardYardId).isEmpty();
+            if(isEmptyInCredit) {
+                this.repository.delete(assignation.get());
+                Map<String, Object> response = new HashMap<>();
+                response.put("result", "Eliminado correctamente");
+                return response;
+            } else
+                throw new TransactionNotFoundException("No se puede eliminar poque existe información de crédito asociado");
         } else {
-            throw new TransactionNotFoundException("No se ha podido obtener una asignación con ese id de cliente e id de patio");
+            throw new TransactionNotFoundException("No se ha podido eliminar la asignación con ese id de cliente e id de patio");
         }
     }
 }

@@ -1,24 +1,33 @@
 package com.pichincha.mvc.domain.dto;
 
 import com.pichincha.mvc.domain.enums.MaritalStatus;
-import com.sun.istack.NotNull;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class ClientDto {
     private Long id;
+    @NotNull(message = "El campo identificación es obligatorio")
     private String identification;
+    @NotNull(message = "El campo nombres es obligatorio")
     private String names;
+    @NotNull(message = "El campo edad es obligatorio")
     private Integer age;
+    @NotNull(message = "El campo fecha de nacimiento es obligatorio")
     private Date birthday;
+    @NotNull(message = "El campo apellidos es obligatorio")
     private String lastNames;
+    @NotNull(message = "El campo dirección es obligatorio")
     private String direction;
+    @NotNull(message = "El campo celular es obligatorio")
     private String cellphoneNumber;
+    @NotNull(message = "El campo estado civil es obligatorio")
     private MaritalStatus maritalStatus;
+    @NotNull(message = "El campo sujeto a crédito es obligatorio")
+    private Boolean creditStatus;
     private String spouseNames;
     private String spouseLastnames;
-    @NotNull
-    private Boolean creditStatus;
 
     public ClientDto(Long id, String identification, String names, Integer age, Date birthday, String lastNames, String direction, String cellphoneNumber, MaritalStatus maritalStatus, String spouseNames, String spouseLastnames, Boolean creditStatus) {
         this.id = id;
